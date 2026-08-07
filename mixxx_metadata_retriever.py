@@ -163,7 +163,7 @@ def main():
                 if not (metadata.id is None):
                     system('cls')
                 print("New data!\nAccessing...")
-                db_access(config_data.db_path, metadata, config_data.tags)
+                db_access(config_data.db_path, metadata, config_data.tags, cover_access=config_data.cover)
                 print("Writing...")
                 if config_data.cover:
                     write_meta_file(COVER_FILENAME, metadata.cover_path)
