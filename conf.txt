@@ -1,0 +1,3 @@
+db_path:DEFAULT
+cover:True
+tags:artist,title
