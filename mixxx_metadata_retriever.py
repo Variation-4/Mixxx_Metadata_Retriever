@@ -69,9 +69,9 @@ def set_conf(conf_class: ConfigurationData, filename: str):
     except KeyError:
         print("Configuration file not formatted properly: Using default db path")
     try:
-        if conf_data["cover"].lower() == "true" or conf_data["cover"] == "True":
+        if conf_data["cover"].lower() == "true":
             conf_class.cover = True
-        elif conf_data["cover"].lower() == "false" or conf_data["cover"] == "False":
+        elif conf_data["cover"].lower() == "false":
             conf_class.cover = False
         else:
             print("Configuration file not formatted properly: Using default cover option")
