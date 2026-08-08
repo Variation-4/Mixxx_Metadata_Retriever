@@ -1,3 +1,4 @@
 db_path:DEFAULT
+check_interval:5
 cover:True
 tags:artist,title

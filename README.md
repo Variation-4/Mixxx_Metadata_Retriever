@@ -16,11 +16,12 @@ and what metadata to obtain.
 
 ### Configuration fields
 
-| Field   | Description                                                                                                                                                                                                                               |
-|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| db_path | The path of Mixxx's database (`mixxxdb.sqlite`)<br/>`DEFAULT` will use the standard directory on Windows (i.e. `~/AppData/local/Mixxx/mixxxdb.sqlite`)                                                                                    |
-| cover   | Whether or not to obtain the path of the cover art.<br/>Is either `True` or `False`.                                                                                                                                                      |
-| tags    | Which metadata entries to retrieve.<br/>Must be an existing entry in the database (see [trackschema](https://github.com/mixxxdj/mixxx/blob/main/src/library/dao/trackschema.h), specifically all strings that are part of `LIBRARYTABLE`) |
+| Field          | Description                                                                                                                                                                                                                                                                                                   |
+|----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| db_path        | The path of Mixxx's database (`mixxxdb.sqlite`)<br/>`DEFAULT` will use the standard directory on Windows (i.e. `~/AppData/local/Mixxx/mixxxdb.sqlite`)                                                                                                                                                        |
+| check_interval | The amount of time in seconds to wait between each check of if a new track is playing.                                                                                                                                                                                                                        |
+| cover          | Whether or not to obtain the path of the cover art.<br/>Is either `True` or `False`.                                                                                                                                                                                                                          |
+| tags           | Which metadata entries to retrieve.<br/>Must be an existing entry in the database (see [trackschema](https://github.com/mixxxdj/mixxx/blob/main/src/library/dao/trackschema.h), specifically all strings that are part of `LIBRARYTABLE`)<br/>Formatted as a comma-seperated list (e.g. `artist,title,genre`) |
 
 ## Usage
 

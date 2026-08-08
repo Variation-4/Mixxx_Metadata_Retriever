@@ -11,15 +11,17 @@ ERROR_FILENAME = "errorLog.txt"
 DEFAULT_CONFIGURATION = \
 """\
 db_path:DEFAULT
+check_interval:5
 cover:True
-tags:artist,title
+tags:artist,title\
 """
 
 class ConfigurationData:
-    def __init__(self, db_path=DEFAULT_DB_PATH, cover=True, tags=None):
+    def __init__(self, db_path=DEFAULT_DB_PATH, check_interval=5, cover=True, tags=None):
         if tags is None:
             tags = ["artist", "title"]
         self.db_path = db_path
+        self.check_interval = check_interval
         self.cover = cover
         self.tags = tags
 
@@ -68,6 +70,10 @@ def set_conf(conf_class: ConfigurationData, filename: str):
             conf_class.db_path = conf_data["db_path"]
     except KeyError:
         print("Configuration file not formatted properly: Using default db path")
+    try:
+        conf_class.check_interval = int(conf_data["check_interval"])
+    except KeyError or ValueError:
+        print("Configuration file not formatted properly: Using default check interval")
     try:
         if conf_data["cover"].lower() == "true":
             conf_class.cover = True
@@ -176,7 +182,7 @@ def main():
             print("An error has occurred: ", error)
             with open(ERROR_FILENAME, "a" if Path(ERROR_FILENAME).is_file() else "w", encoding='utf-8') as f:
                 f.write("[" + formatted_time + "]: Error: " + str(error) + "\n")
-        time.sleep(5)
+        time.sleep(config_data.check_interval)
 
 if __name__ == "__main__":
     main()
