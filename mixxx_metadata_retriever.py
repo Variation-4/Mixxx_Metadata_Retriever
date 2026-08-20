@@ -87,7 +87,7 @@ def write_meta_file(filename: str, data) -> None:
         if data is None:
             f.write("")
         else:
-            f.write(data)
+            f.write(str(data))
 
 def write_default_conf_file() -> None:
     """
