@@ -204,7 +204,7 @@ def get_filename(cursor: sqlite3.Cursor, track_loc_id: int) -> str:
     """
     return (cursor.execute("SELECT filename FROM track_locations WHERE id=" + str(track_loc_id))).fetchall()[0][0]
 
-def db_access(db_path: str, metadata: Metadata, tags: list, cover_access: bool = True) -> None:
+def db_access(db_path: Path, metadata: Metadata, tags: list, cover_access: bool = True) -> None:
     """
     Access Mixxx's database and provide Metadata the relevant metadata fields.
     :param db_path: the path to the database
@@ -246,7 +246,7 @@ def db_access(db_path: str, metadata: Metadata, tags: list, cover_access: bool =
 
     conn.close()
 
-def new_data_check(db_path: str, metadata: Metadata) -> bool:
+def new_data_check(db_path: Path, metadata: Metadata) -> bool:
     """
     Checks if the most recently played track is different from the one detailed in Metadata.
     :param db_path: the path to the database
