@@ -29,5 +29,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v6
         with:
-          name: app-${{ matrix.os }}
+          name: mixxx_metadata_retriever-v-${{ matrix.os }}
           path: dist/*
