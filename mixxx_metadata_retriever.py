@@ -170,7 +170,7 @@ def get_metadata(cursor: sqlite3.Cursor, track_id: int, tags: list[str]) -> dict
     """
     tag_string = ""
     for tag in tags:
-        tag_string = tag_string + ("" if tag_string == "" else ", ") + tag
+        tag_string = tag_string + ("" if tag_string == "" else ", ") + tag.strip()
     metatags = (cursor.execute(f"SELECT {tag_string} FROM library WHERE id={str(track_id)}")).fetchall()[0]
     metadata = dict()
     for i in range(0, len(metatags)):
