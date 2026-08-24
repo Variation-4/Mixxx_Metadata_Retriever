@@ -26,3 +26,7 @@ and what metadata to obtain.
 ## Usage
 
 Commandline arguments have yet to be implemented.
+
+--
+
+*Note that the Ubuntu build is not tested*
