@@ -25,7 +25,16 @@ and what metadata to obtain.
 
 ## Usage
 
-Commandline arguments have yet to be implemented.
+```
+Usage: mixxx_metadata_retriever [OPTIONS]
+
+Options:
+  -h, --help    Show this help message
+  -v            Print version information
+  --quiet       Don't print obtained information
+  --no-clear    Don't clear the console when there's new information
+  --one-file    Write all metadata into one file
+```
 
 --
 
