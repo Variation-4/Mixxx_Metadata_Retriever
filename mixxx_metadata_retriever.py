@@ -293,23 +293,24 @@ def main():
     # --no-clear : don't clear the console on new data
     args = sys.argv[1:]
     for arg in args:
-        if arg == "-v":
-            print(VERSION)
-            return
-        elif arg == "-h" or arg == "--help":
-            print("Error: unknown option, see usage below")
-            print(USAGE_STATEMENT)
-            print(HELP_STATEMENT)
-            return
-        elif arg == "--quiet":
-            quiet = True
-        elif arg == "--one-file":
-            one_file = True
-        elif arg == "--no-clear":
-            no_clear = True
-        else:
-            print(USAGE_STATEMENT)
-            return
+        match arg:
+            case "-v":
+                print(VERSION)
+                return
+            case "-h" | "--help":
+                print(USAGE_STATEMENT)
+                print(HELP_STATEMENT)
+                return
+            case "--quiet":
+                quiet = True
+            case "--one-file":
+                one_file = True
+            case "--no-clear":
+                no_clear = True
+            case _:
+                print("Error: unknown option, see usage below")
+                print(USAGE_STATEMENT)
+                return
     # Construct dataclasses and load configuration data
     metadata = Metadata()
     config_data = ConfigurationData()
