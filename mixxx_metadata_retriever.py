@@ -249,6 +249,8 @@ def db_access(db_path: Path, metadata: Metadata, tags: list, cover_access: bool 
         metadata.cover = get_cover(cursor, metadata.id)
         if not (metadata.cover is None):
             metadata.cover_path = metadata.path[:len(metadata.filename)*(-1)] + metadata.cover
+        else:
+            metadata.cover_path = None
         if not quiet:
             print("TRACK PATH -", metadata.path)
             print("FILENAME -", metadata.filename)
