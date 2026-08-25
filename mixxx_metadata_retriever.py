@@ -30,7 +30,7 @@ cover:True
 tags:artist,title\
 """
 ##CONSTANTS#############################################################
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 ##VERSION###############################################################
 
 class ConfigurationData:
