@@ -9,6 +9,19 @@ DEFAULT_DB_PATH = Path.home() / "AppData/Local/Mixxx/mixxxdb.sqlite"
 CONF_FILE_PATH = "conf.txt"
 COVER_FILENAME = "cover.txt"
 ERROR_FILENAME = "errorLog.txt"
+USAGE_STATEMENT = \
+"""
+Usage: mixxx_metadata_retriever [OPTIONS]
+"""
+HELP_STATEMENT = \
+"""
+Options:
+  -h, --help    Show this help message
+  -v            Print version information
+  --quiet       Don't print obtained information
+  --no-clear    Don't clear the console when there's new information
+  --one-file    Write all metadata into one file
+"""
 DEFAULT_CONFIGURATION = \
 """\
 db_path:DEFAULT
@@ -283,12 +296,20 @@ def main():
         if arg == "-v":
             print(VERSION)
             return
+        elif arg == "-h" or arg == "--help":
+            print("Error: unknown option, see usage below")
+            print(USAGE_STATEMENT)
+            print(HELP_STATEMENT)
+            return
         elif arg == "--quiet":
             quiet = True
         elif arg == "--one-file":
             one_file = True
         elif arg == "--no-clear":
             no_clear = True
+        else:
+            print(USAGE_STATEMENT)
+            return
     # Construct dataclasses and load configuration data
     metadata = Metadata()
     config_data = ConfigurationData()
