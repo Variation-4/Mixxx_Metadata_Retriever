@@ -1,4 +1,5 @@
 import sqlite3
+import sys
 from pathlib import Path
 import time
 from os import system
@@ -16,6 +17,8 @@ cover:True
 tags:artist,title\
 """
 ##CONSTANTS#############################################################
+VERSION = "1.1.0"
+##VERSION###############################################################
 
 class ConfigurationData:
     """
@@ -204,7 +207,7 @@ def get_filename(cursor: sqlite3.Cursor, track_loc_id: int) -> str:
     """
     return (cursor.execute("SELECT filename FROM track_locations WHERE id=" + str(track_loc_id))).fetchall()[0][0]
 
-def db_access(db_path: Path, metadata: Metadata, tags: list, cover_access: bool = True) -> None:
+def db_access(db_path: Path, metadata: Metadata, tags: list, cover_access: bool = True, quiet: bool = False) -> None:
     """
     Access Mixxx's database and provide Metadata the relevant metadata fields.
     :param db_path: the path to the database
@@ -213,36 +216,40 @@ def db_access(db_path: Path, metadata: Metadata, tags: list, cover_access: bool 
     :param cover_access: whether to retrieve the cover art
     :return: None
     """
-    print("-----------------------------------------")
+    if not quiet:
+        print("-----------------------------------------")
     # Connect to Mixxx's database
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Obtain the id and location id of most recently played/current track
     metadata.id = get_id(cursor)
-    print("ID -", metadata.id)
     metadata.location_id = get_loc_id(cursor, metadata.id)
-    print("LOC ID -", metadata.location_id)
+    if not quiet:
+        print("ID -", metadata.id)
+        print("LOC ID -", metadata.location_id)
 
     # Obtain cover art and file path
     if cover_access:
         metadata.path = get_location(cursor, metadata.location_id)
-        print("TRACK PATH -", metadata.path)
         metadata.filename = get_filename(cursor, metadata.location_id)
-        print("FILENAME -", metadata.filename)
         metadata.cover = get_cover(cursor, metadata.id)
-        print("COVER -", metadata.cover)
         if not (metadata.cover is None):
             metadata.cover_path = metadata.path[:len(metadata.filename)*(-1)] + metadata.cover
-        print("COVER PATH -", metadata.cover_path)
+        if not quiet:
+            print("TRACK PATH -", metadata.path)
+            print("FILENAME -", metadata.filename)
+            print("COVER -", metadata.cover)
+            print("COVER PATH -", metadata.cover_path)
 
     # Obtain metadata
     metatags = get_metadata(cursor, metadata.id, tags)
     for tag in metatags:
         metadata.tags[tag] = metatags[tag]
-        print(f"{tag.upper()} - {metadata.tags[tag]}")
-
-    print("-----------------------------------------")
+        if not quiet:
+            print(f"{tag.upper()} - {metadata.tags[tag]}")
+    if not quiet:
+        print("-----------------------------------------")
 
     conn.close()
 
@@ -262,6 +269,26 @@ def new_data_check(db_path: Path, metadata: Metadata) -> bool:
     return metadata.id != new_id
 
 def main():
+    # Initial variables
+    quiet = False
+    one_file = False
+    no_clear = False
+    # Handle arguments
+    # --quiet : no print statements
+    # -v : print version
+    # --one-file : write everything into one file instead of many
+    # --no-clear : don't clear the console on new data
+    args = sys.argv[1:]
+    for arg in args:
+        if arg == "-v":
+            print(VERSION)
+            return
+        elif arg == "--quiet":
+            quiet = True
+        elif arg == "--one-file":
+            one_file = True
+        elif arg == "--no-clear":
+            no_clear = True
     # Construct dataclasses and load configuration data
     metadata = Metadata()
     config_data = ConfigurationData()
@@ -271,17 +298,25 @@ def main():
         try:
             # Check if a new track is playing
             if new_data_check(config_data.db_path, metadata) or metadata.id is None:
-                if not (metadata.id is None):
+                if not (metadata.id is None) and not no_clear:
                     system('cls')
                 # Retrieve metadata
                 print("New data!\nAccessing...")
-                db_access(config_data.db_path, metadata, config_data.tags, cover_access=config_data.cover)
+                db_access(config_data.db_path, metadata, config_data.tags, cover_access=config_data.cover, quiet=quiet)
                 # Write metadata to relevant files
                 print("Writing...")
-                if config_data.cover:
-                    write_meta_file(COVER_FILENAME, metadata.cover_path)
-                for tag in metadata.tags:
-                    write_meta_file(f"{tag}.txt", metadata.tags[tag])
+                if one_file:
+                    write_contents = ""
+                    if config_data.cover:
+                        write_contents += f"COVER: {metadata.cover_path}\n"
+                    for tag in metadata.tags:
+                        write_contents += f"{tag.upper()}: {metadata.tags[tag]}\n"
+                    write_meta_file("metadata.txt", write_contents)
+                else:
+                    if config_data.cover:
+                        write_meta_file(COVER_FILENAME, metadata.cover_path)
+                    for tag in metadata.tags:
+                        write_meta_file(f"{tag}.txt", metadata.tags[tag])
                 print("Data written")
         except Exception as error:
             named_tuple = time.localtime()
