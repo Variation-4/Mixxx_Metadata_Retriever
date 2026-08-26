@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import sys
 from pathlib import Path
@@ -9,6 +10,7 @@ DEFAULT_DB_PATH = Path.home() / "AppData/Local/Mixxx/mixxxdb.sqlite"
 CONF_FILE_PATH = "conf.txt"
 COVER_FILENAME = "cover.txt"
 ERROR_FILENAME = "errorLog.txt"
+META_WRITE_DIR = "metadata/"
 USAGE_STATEMENT = \
 """
 Usage: mixxx_metadata_retriever [OPTIONS]
@@ -99,7 +101,7 @@ def write_meta_file(filename: str, data) -> None:
     :param data: the contents of the file
     :return: None
     """
-    with open("metadata/" + filename, "w", encoding="utf-8") as f:
+    with open(META_WRITE_DIR + filename, "w", encoding="utf-8") as f:
         if data is None:
             f.write("")
         else:
@@ -329,6 +331,7 @@ def main():
                 db_access(config_data.db_path, metadata, config_data.tags, cover_access=config_data.cover, quiet=quiet)
                 # Write metadata to relevant files
                 print("Writing...")
+                os.makedirs(META_WRITE_DIR, exist_ok=True)
                 if one_file:
                     write_contents = ""
                     if config_data.cover:
