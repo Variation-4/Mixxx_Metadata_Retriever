@@ -3,7 +3,6 @@ import sqlite3
 import sys
 from pathlib import Path
 import time
-from os import system
 
 ##CONSTANTS#############################################################
 DEFAULT_DB_PATH = Path.home() / "AppData/Local/Mixxx/mixxxdb.sqlite"
@@ -286,6 +285,13 @@ def new_data_check(db_path: Path, metadata: Metadata) -> bool:
 
     return metadata.id != new_id
 
+def console_clear() -> None:
+    """
+    Clears the console window.
+    :return: None
+    """
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def main():
     # Initial variables
     quiet = False
@@ -326,7 +332,7 @@ def main():
             # Check if a new track is playing
             if new_data_check(config_data.db_path, metadata) or metadata.id is None:
                 if not (metadata.id is None) and not no_clear:
-                    system('cls')
+                    console_clear()
                 # Retrieve metadata
                 print("New data!\nAccessing...")
                 db_access(config_data.db_path, metadata, config_data.tags, cover_access=config_data.cover, quiet=quiet)
