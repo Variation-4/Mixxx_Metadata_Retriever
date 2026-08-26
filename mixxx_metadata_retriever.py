@@ -229,6 +229,7 @@ def db_access(db_path: Path, metadata: Metadata, tags: list, cover_access: bool 
     :param metadata: the Metadata class
     :param tags: the metadata fields to retrieve
     :param cover_access: whether to retrieve the cover art
+    :param quiet: whether to suppress print statements
     :return: None
     """
     if not quiet:
